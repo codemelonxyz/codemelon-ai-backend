@@ -18,9 +18,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Verify SSH key
-        run: ssh -T git@github.com
-
       - name: Deploy application
         run: |
           ssh -o StrictHostKeyChecking=no pranay.vishwakarma7400@${{ secrets.VM_Static_Ip }} "
