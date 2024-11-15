@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import serverAuth from './middlewares/server.auth.js';
+import generateKeyRoutes from './routes/ai.code.routes.js';
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.get('/', (req, res) => {
         instruction: "Go to codemelon.xyz/developers/ai for more"
     })
 });
+
+app.use('/api/v1/ai/code/generate-key', generateKeyRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${process.env.PORT || 8000}`);
