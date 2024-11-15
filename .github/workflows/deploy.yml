@@ -1,0 +1,36 @@
+name: Deploy to Google Cloud VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy application
+        run: |
+          ssh -o StrictHostKeyChecking=no vaidityatanwar@${{ secrets.VM_Static_Ip }} "
+            cd /home/vaidityatanwar/codemelon &&
+            git pull &&
+            echo 'DB_CONFIG_URL=${{ secrets.DB_CONFIG_URL }}' > .env &&
+            echo 'SERVER_KEY=${{ secrets.SERVER_KEY }}' >> .env &&
+            echo 'JWT_SECRET=${{ secrets.JWT_SECRET }}' >> .env &&
+            echo 'JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}' >> .env &&
+            echo 'GENERATION_KEY=${{ secrets.GENERATION_KEY }}' >> .env &&
+            sudo touch letsencrypt/acme.json &&
+            sudo chmod 600 letsencrypt/acme.json &&
+            sudo docker-compose down || true &&
+            sudo docker-compose build &&
+            sudo docker-compose up -d
+          "
