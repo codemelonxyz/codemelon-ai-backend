@@ -20,7 +20,7 @@ jobs:
 
       - name: Deploy application
         run: |
-          ssh -o StrictHostKeyChecking=no vaidityatanwar@${{ secrets.VM_Static_Ip }} "
+          ssh -o StrictHostKeyChecking=no pranay.vishwakarma7400@${{ secrets.VM_Static_Ip }} "
             cd /home/vaidityatanwar/codemelon &&
             git pull &&
             echo 'DB_CONFIG_URL=${{ secrets.DB_CONFIG_URL }}' > .env &&
