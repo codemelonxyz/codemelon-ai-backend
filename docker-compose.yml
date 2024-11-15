@@ -35,6 +35,11 @@ services:
       - "traefik.http.routers.codemelon-app-secure.rule=Host(`34.0.7.222`)"
       - "traefik.http.routers.codemelon-app-secure.entrypoints=websecure"
       - "traefik.http.routers.codemelon-app-secure.tls.certresolver=myresolver"
+      - "traefik.http.routers.codemelon-app-ai.rule=Host(`ai.api.codemelon.xyz`)"
+      - "traefik.http.routers.codemelon-app-ai.entrypoints=web"
+      - "traefik.http.routers.codemelon-app-ai-secure.rule=Host(`ai.api.codemelon.xyz`)"
+      - "traefik.http.routers.codemelon-app-ai-secure.entrypoints=websecure"
+      - "traefik.http.routers.codemelon-app-ai-secure.tls.certresolver=myresolver"
     environment:
       - PORT=8000
 
