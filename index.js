@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
     })
 });
 
-app.use('/api/v1/ai/code/generate-key', generateKeyRoutes);
+app.use('/api/v1', generateKeyRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${process.env.PORT || 8000}`);
