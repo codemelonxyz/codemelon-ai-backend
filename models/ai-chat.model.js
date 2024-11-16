@@ -41,9 +41,19 @@ class chatModel {
         }
     }
 
-
-    static async addMessage(chat_id) {
-        return true;
+    static async addMessage(chat_id, message) {
+        try {
+            const query = "SELECT * from code_chat_data WHERE id = ?";
+            const result = await pool.query(query, [chat_id]);
+            let data = result[0]?.data ? JSON.parse(result[0].data) : [];
+            data.push(message);
+            const updateQuery = "UPDATE code_chat_data SET data = ? WHERE id = ?";
+            await pool.query(updateQuery, [JSON.stringify(data), chat_id]);
+            return true;
+        } catch (err) {
+            console.error("Error in addMessage:", err);
+            return false;
+        }
     }
 }
 

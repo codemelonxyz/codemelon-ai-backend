@@ -28,6 +28,14 @@ jobs:
             echo 'JWT_SECRET=${{ secrets.JWT_SECRET }}' >> .env &&
             echo 'JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}' >> .env &&
             echo 'GENERATION_KEY=${{ secrets.GENERATION_KEY }}' >> .env &&
+            echo 'AI_API_KEY1=${{ secrets.AI_API_KEY1 }}' >> .env &&
+            echo 'AI_API_KEY2=${{ secrets.AI_API_KEY2 }}' >> .env &&
+            echo 'AI_API_KEY3=${{ secrets.AI_API_KEY3 }}' >> .env &&
+            echo 'AI_URL'=${{ secrets.AI_URL }}' >> .env &&
+            echo 'AI_URL2=${{ secrets.AI_URL2 }}' >> .env &&
+            echo 'AI_URL3=${{ secrets.AI_URL3 }}' >> .env &&
+            echo 'AI_URL4=${{ secrets.AI_URL4 }}' >> .env &&
+            echo 'SYSTEM_PROMPT=${{ secrets.SYSTEM_PROMPT }}' >> .env &&
             sudo touch letsencrypt/acme.json &&
             sudo chmod 600 letsencrypt/acme.json &&
             sudo docker-compose down || true &&
