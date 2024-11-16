@@ -31,7 +31,7 @@ jobs:
             echo 'AI_API_KEY1=${{ secrets.AI_API_KEY1 }}' >> .env &&
             echo 'AI_API_KEY2=${{ secrets.AI_API_KEY2 }}' >> .env &&
             echo 'AI_API_KEY3=${{ secrets.AI_API_KEY3 }}' >> .env &&
-            echo 'AI_URL'=${{ secrets.AI_URL }}' >> .env &&
+            echo 'AI_URL=${{ secrets.AI_URL }}' >> .env &&
             echo 'AI_URL2=${{ secrets.AI_URL2 }}' >> .env &&
             echo 'AI_URL3=${{ secrets.AI_URL3 }}' >> .env &&
             echo 'AI_URL4=${{ secrets.AI_URL4 }}' >> .env &&
