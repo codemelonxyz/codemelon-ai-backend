@@ -54,6 +54,7 @@ class chatModel {
 
     static async addMessage(chat_id, message) {
         try {
+            console.log(chat_id, message);
             const query = "SELECT * from code_chat_data WHERE id = ?";
             const result = await pool.query(query, [chat_id]);
             let data = result[0]?.data ? JSON.parse(result[0].data) : [];
