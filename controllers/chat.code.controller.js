@@ -31,7 +31,7 @@ class chatController {
             const auth_key = await authKeyModel.searchKey(req.authKey.id);
             const numberOfPreviousChats = await aiChatModel.getUserChat(auth_key[0].auth_key);
             console.log(numberOfPreviousChats);
-            if (numberOfPreviousChats != null && numberOfPreviousChats.length >= 10) {
+            if (numberOfPreviousChats != null && numberOfPreviousChats.length >= 50) {
                 return res.status(400).json({ message: 'Maximum chat limit reached', instruction: "Delete previous chats to create more chats" });
             }
 
