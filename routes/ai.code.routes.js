@@ -10,7 +10,8 @@ router.get('/ai/code/generate-key', tokenValidator.validateToken, generateKey.ge
 router.get('/ai/code/get-key', tokenValidator.validateToken, generateKey.getKey);
 router.get('/ai/code/get-remaining-quota', tokenValidator.validateToken, generateKey.getRemainingQuota);
 router.get('/ai/code/chat/create', tokenValidator.validateToken, chatController.createChat);
-router.get('/ai/code/chat', tokenValidator.validateToken, chatController.chat);
+router.put('/ai/code/chat', tokenValidator.validateToken, chatController.chat);
+router.get("/ai/code/chat", tokenValidator.validateToken, chatController.getChatById);
 router.get('/ai/code/chats', tokenValidator.validateToken, chatController.getUserChats);
 router.delete('/ai/code/chat/delete', tokenValidator.validateToken, chatController.deleteChat);
 

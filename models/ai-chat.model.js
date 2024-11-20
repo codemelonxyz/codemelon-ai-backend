@@ -5,6 +5,17 @@ class chatModel {
         
     }
 
+    static async getChatById(chat_id, auth_key) {
+        try {
+            const query = "SELECT * FROM code_chat_data WHERE id = ? AND auth_key = ?";
+            const values = [chat_id, auth_key];
+            const [rows] = await pool.query(query, values);
+            return rows[0];
+        } catch (err) {
+            return null;
+        }
+    }
+
     static async getUserChat(auth_key) {
         try {
             const query = "SELECT id FROM code_chat_data WHERE auth_key = ?";

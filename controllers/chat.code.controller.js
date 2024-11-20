@@ -10,6 +10,22 @@ class chatController {
     }
 
 
+    static async getChatById(req, res) {
+        try {
+            const auth_key = await authKeyModel.searchKey(req.authKey.id);
+            const chat_id = req.query.id;
+            if (!chat_id) {
+                return res.status(400).json({ message: 'Bad Request' });
+            }
+            const chat = await aiChatModel.getChatById(chat_id, auth_key[0].auth_key);
+            if (chat) {
+                return res.status(200).json({ message: 'Chat', chat: chat });
+            }
+        } catch (error) {
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+
     static async createChat(req, res) {
         try {
             const auth_key = await authKeyModel.searchKey(req.authKey.id);
