@@ -5,23 +5,22 @@ services:
     image: traefik:v2.6
     container_name: traefik
     command:
-      - "--api.insecure=false"  # Disable insecure Traefik dashboard
-      - "--providers.docker=true"  # Enable Docker provider
-      - "--entrypoints.web.address=:80"  # Expose HTTP port
-      - "--entrypoints.websecure.address=:443"  # Expose HTTPS port
-      - "--certificatesresolvers.myresolver.acme.httpChallenge=true"  # Add this line
-      - "--certificatesresolvers.myresolver.acme.httpChallenge.entryPoint=web"  # Add this line
-      - "--certificatesresolvers.myresolver.acme.email=support@codemelon.xyz"  # Set your actual email for Let's Encrypt
-      - "--certificatesresolvers.myresolver.acme.storage=/acme.json"  # Store certs
-      - "--entrypoints.websecure.http.tls=true"  # Enable TLS on websecure
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlsChallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=support@codemelon.xyz"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--providers.docker.exposedByDefault=false"
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"  # Existing volume mapping
-      - "./letsencrypt/acme.json:/acme.json" 
-      # - "letsencrypt:/letsencrypt"
-      # - "./traefik/traefik.yml:/traefik.yml"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "letsencrypt:/letsencrypt"
+      - "./letsencrypt/acme.json:/letsencrypt/acme.json"
+      - "./traefik/traefik.yml:/traefik.yml"
 
   codemelon-app:
     build:
@@ -32,15 +31,23 @@ services:
     env_file:
       - .env
     labels:
-    - "traefik.enable=true"  # Enable Traefik for this service
-    - "traefik.http.routers.codemelon-app.rule=Host(`ai.api.codemelon.xyz`)"  # Route based on the host
-    - "traefik.http.routers.codemelon-app.entrypoints=websecure"  # Use HTTPS (websecure)
-    - "traefik.http.routers.codemelon-app.tls.certresolver=myresolver"  # Use the defined certificate resolver
-    - "traefik.http.services.codemelon-app.loadbalancer.server.port=8000"  # Route to backend on port 8000
-    - "traefik.http.routers.codemelon-app-http.rule=Host(`ai.api.codemelon.xyz`)"  # HTTP router rule
-    - "traefik.http.routers.codemelon-app-http.entrypoints=web"  # HTTP entrypoint
-    - "traefik.http.routers.codemelon-app-http.middlewares=redirect-to-https"  # Redirect middleware
-    - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"  # Redirect to HTTPS
-    restart: unless-stopped
-    ports:
-      - "8000:8000"  # Expose internal port for app container (not necessary for Traefik, but useful for debugging)
+      - "traefik.enable=true"
+      - "traefik.http.routers.codemelon-app.rule=Host(`34.0.7.222`)"
+      - "traefik.http.routers.codemelon-app.entrypoints=web"
+      - "traefik.http.routers.codemelon-app-secure.rule=Host(`34.0.7.222`)"
+      - "traefik.http.routers.codemelon-app-secure.entrypoints=websecure"
+      - "traefik.http.routers.codemelon-app-secure.tls.certresolver=myresolver"
+      - "traefik.http.routers.codemelon-app-ai.rule=Host(`ai.api.codemelon.xyz`)"
+      - "traefik.http.routers.codemelon-app-ai.entrypoints=web"
+      - "traefik.http.routers.codemelon-app-ai-secure.rule=Host(`ai.api.codemelon.xyz`)"
+      - "traefik.http.routers.codemelon-app-ai-secure.entrypoints=websecure"
+      - "traefik.http.routers.codemelon-app-ai-secure.tls.certresolver=myresolver"
+      - "traefik.http.routers.codemelon-app.middlewares=cors"
+      - "traefik.http.routers.codemelon-app-secure.middlewares=cors"
+      - "traefik.http.routers.codemelon-app-ai.middlewares=cors"
+      - "traefik.http.routers.codemelon-app-ai-secure.middlewares=cors"
+    environment:
+      - PORT=8000
+
+volumes:
+  letsencrypt:
