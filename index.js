@@ -12,7 +12,7 @@ const app = express();
 // Global Middlewares //
 app.use(express.json());
 app.use(cors());
-app.use(serverAuth);
+// app.use(serverAuth);
 
 app.get('/', (req, res) => {
     res.status(200).json({
