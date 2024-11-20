@@ -7,10 +7,10 @@ class TokenValidators {
     static async validateToken(req, res, next) {
         try {
             console.log(req.headers);
-            if (!req.headers['Authorization']) {
+            if (!req.headers['authorization']) {
                 return res.status(401).json({ message: 'No token provided' });
             }
-            const token = req.headers['Authorization'].replace('Bearer ', '');
+            const token = req.headers['authorization'].replace('Bearer ', '');
             const userExist = await jwtFunc.verifyToken(token);
             if (!userExist) {
                 return res.status(401).send({ message: 'Unauthorized' });
