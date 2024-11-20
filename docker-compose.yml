@@ -12,6 +12,7 @@ services:
       - "--certificatesresolvers.myresolver.acme.tlsChallenge=true"
       - "--certificatesresolvers.myresolver.acme.email=support@codemelon.xyz"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--providers.docker.exposedByDefault=false"
     ports:
       - "80:80"
       - "443:443"
@@ -19,6 +20,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "letsencrypt:/letsencrypt"
       - "./letsencrypt/acme.json:/letsencrypt/acme.json"
+      - "./traefik/traefik.yml:/traefik.yml"
 
   codemelon-app:
     build:
@@ -40,6 +42,10 @@ services:
       - "traefik.http.routers.codemelon-app-ai-secure.rule=Host(`ai.api.codemelon.xyz`)"
       - "traefik.http.routers.codemelon-app-ai-secure.entrypoints=websecure"
       - "traefik.http.routers.codemelon-app-ai-secure.tls.certresolver=myresolver"
+      - "traefik.http.routers.codemelon-app.middlewares=cors"
+      - "traefik.http.routers.codemelon-app-secure.middlewares=cors"
+      - "traefik.http.routers.codemelon-app-ai.middlewares=cors"
+      - "traefik.http.routers.codemelon-app-ai-secure.middlewares=cors"
     environment:
       - PORT=8000
 

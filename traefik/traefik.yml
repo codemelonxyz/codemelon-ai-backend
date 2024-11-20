@@ -1,0 +1,18 @@
+
+http:
+  middlewares:
+    cors:
+      headers:
+        accessControlAllowOrigin: "*"
+        accessControlAllowMethods:
+          - "GET"
+          - "OPTIONS"
+          - "PUT"
+          - "POST"
+          - "DELETE"
+        accessControlAllowHeaders:
+          - "Origin"
+          - "Content-Type"
+          - "Accept"
+          - "Authorization"
+        accessControlAllowCredentials: true

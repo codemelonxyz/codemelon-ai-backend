@@ -9,9 +9,9 @@ dotenv.config();
 const port = process.env.PORT || 8000;
 const app = express();
 
+app.use(cors());
 // Global Middlewares //
 app.use(express.json());
-app.use(cors());
 // app.use(serverAuth);
 
 app.get('/', (req, res) => {
