@@ -14,6 +14,9 @@ class chatCompletion{
     static async getQuestions(req, res) {
         const userId = req.authKey.id;
         const chatId = req.query.id;
+        if (!chatId) {
+            return res.status(400).json({ message: 'Bad Request' });
+        };
         const keyExist = await authKeyModel.searchKey(userId);
         const { language, framework, uiLibrary, componentType } = req.body;
         if(keyExist.length === 0) {
