@@ -56,13 +56,24 @@ class chatModel {
         try {
             console.log(chat_id, message);
             const query = "SELECT * from code_chat_data WHERE id = ?";
-            // Destructure rows from the query result
             const [rows] = await pool.query(query, [chat_id]);
-            // Access the data from the first row
-            let data = rows[0]?.data ? JSON.parse(rows[0].data) : [];
+
+            let data;
+            if (typeof rows[0]?.data === 'string') {
+                data = rows[0].data ? JSON.parse(rows[0].data) : [];
+            } else if (typeof rows[0]?.data === 'object') {
+                data = rows[0].data || [];
+            } else {
+                data = [];
+            }
+
             data.push(message);
+            console.log(data);
+
             const updateQuery = "UPDATE code_chat_data SET data = ? WHERE id = ?";
-            await pool.query(updateQuery, [JSON.stringify(data), chat_id]);
+            const dataToStore = JSON.stringify(data);
+            await pool.query(updateQuery, [dataToStore, chat_id]);
+
             return true;
         } catch (err) {
             console.error("Error in addMessage:", err);

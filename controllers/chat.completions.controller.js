@@ -94,10 +94,18 @@ class chatCompletion {
             await chatModel.addMessage(chatId, { user: message });
 
             // Retrieve the entire chat history
-            const chatHistory = await chatModel.getChatById(chatId);
+            const chatHistory = await chatModel.getChatById(chatId, keyExist[0].auth_key);
 
-            // Generate AI response using the chat history
-            const aiResponse = await aiServices.getResponse(chatHistory);
+            // Parse chat history data
+            let messages = [];
+            if (typeof chatHistory.data === 'string') {
+                messages = JSON.parse(chatHistory.data);
+            } else if (Array.isArray(chatHistory.data)) {
+                messages = chatHistory.data;
+            }
+
+            // Generate AI response using the chat messages
+            const aiResponse = await aiServices.getResponse(messages);
 
             // Append AI response to the chat
             await chatModel.addMessage(chatId, { watermelon: aiResponse.response });
@@ -116,15 +124,21 @@ class chatCompletion {
             await chatModel.addMessage(chatId, { user: message });
 
             // Retrieve the entire chat history
-            const chatHistory = await chatModel.getChatById(chatId);
+            const chatHistory = await chatModel.getChatById(chatId, keyExist[0].auth_key);
 
-          console.log(chatHistory)
-            // Generate AI response using the chat history
-            const aiResponse = await aiServices.getResponse(chatHistory);
+            // Parse chat history data
+            let messages = [];
+            if (typeof chatHistory.data === 'string') {
+                messages = JSON.parse(chatHistory.data);
+            } else if (Array.isArray(chatHistory.data)) {
+                messages = chatHistory.data;
+            }
+
+            // Generate AI response using the chat messages
+            const aiResponse = await aiServices.getResponse(messages);
 
             // Append AI response to the chat
           await chatModel.addMessage(chatId, { watermelon: aiResponse.response });
-          console.log(aiResponse.response)
 
             // Update remaining quota
             await quotaModel.updateQuota(keyExist[0].auth_key, remainingQuota - aiResponse.tokens);
