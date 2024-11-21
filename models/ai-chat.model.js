@@ -56,8 +56,10 @@ class chatModel {
         try {
             console.log(chat_id, message);
             const query = "SELECT * from code_chat_data WHERE id = ?";
-            const result = await pool.query(query, [chat_id]);
-            let data = result[0]?.data ? JSON.parse(result[0].data) : [];
+            // Destructure rows from the query result
+            const [rows] = await pool.query(query, [chat_id]);
+            // Access the data from the first row
+            let data = rows[0]?.data ? JSON.parse(rows[0].data) : [];
             data.push(message);
             const updateQuery = "UPDATE code_chat_data SET data = ? WHERE id = ?";
             await pool.query(updateQuery, [JSON.stringify(data), chat_id]);
