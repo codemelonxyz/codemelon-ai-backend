@@ -111,17 +111,20 @@ class chatCompletion {
                 data: aiResponse.response,
             });
         } else if (type === "codePrompt") {
-            // Append user's prompt to the chat
+          // Append user's prompt to the chat
+          console.log(chatId, message)
             await chatModel.addMessage(chatId, { user: message });
 
             // Retrieve the entire chat history
             const chatHistory = await chatModel.getChatById(chatId);
 
+          console.log(chatHistory)
             // Generate AI response using the chat history
             const aiResponse = await aiServices.getResponse(chatHistory);
 
             // Append AI response to the chat
-            await chatModel.addMessage(chatId, { watermelon: aiResponse.response });
+          await chatModel.addMessage(chatId, { watermelon: aiResponse.response });
+          console.log(aiResponse.response)
 
             // Update remaining quota
             await quotaModel.updateQuota(keyExist[0].auth_key, remainingQuota - aiResponse.tokens);
