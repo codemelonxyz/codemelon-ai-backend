@@ -105,7 +105,7 @@ class chatCompletion {
             }
 
             // Generate AI response using the chat messages
-            const aiResponse = await aiServices.getResponse(messages);
+            const aiResponse = await aiServices.getResponse({ user: `the answers of questions are: ${message}`, previousChats: messages });
 
             // Append AI response to the chat
             await chatModel.addMessage(chatId, { watermelon: aiResponse.response });
